@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_27_180154) do
+ActiveRecord::Schema.define(version: 2018_07_27_180755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,22 @@ ActiveRecord::Schema.define(version: 2018_07_27_180154) do
     t.text "description"
     t.integer "value"
     t.string "photo"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "pairs", force: :cascade do |t|
+    t.string "status"
+    t.bigint "swap_id"
+    t.bigint "combinations_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["combinations_id"], name: "index_pairs_on_combinations_id"
+    t.index ["swap_id"], name: "index_pairs_on_swap_id"
+  end
+
+  create_table "swaps", force: :cascade do |t|
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -45,4 +61,6 @@ ActiveRecord::Schema.define(version: 2018_07_27_180154) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "pairs", "combinations", column: "combinations_id"
+  add_foreign_key "pairs", "swaps"
 end
